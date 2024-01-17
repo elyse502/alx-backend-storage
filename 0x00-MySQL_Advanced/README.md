@@ -488,7 +488,7 @@ Write a SQL script that creates a stored procedure `ComputeAverageScoreForUser` 
 **Requirements:**
 
 * Procedure `ComputeAverageScoreForUser` is taking 1 input:
- * `user_id`, a `users.id` value (you can assume `user_id` is linked to an existing `users`)
+  * `user_id`, a `users.id` value (you can assume `user_id` is linked to an existing `users`)
 ```groovy
 bob@dylan:~$ cat 7-init.sql
 -- Initial
