@@ -35,7 +35,7 @@ _For this project, we expect you to look at this concept:_
 
 # Learning Objectives 📖
 At the end of this project, you are expected to be able to [explain to anyone](https://fs.blog/feynman-learning-technique/), **without the help of Google**:
-# General 📌
+# General📌
 * How to create tables with constraints
 * How to optimize queries by adding indexes
 * What is and how to implement stored procedures and functions in MySQL
