@@ -204,9 +204,164 @@ Italy   7178
 bob@dylan:~$
 ```
 
+## 3. Old school band: [3-glam_rock.sql](3-glam_rock.sql)
+Write a SQL script that lists all bands with `Glam rock` as their main style, ranked by their longevity
 
+**Requirements:**
 
+* Import this table dump: [metal_bands.sql.zip](https://github.com/elyse502/alx-backend-storage/files/13963067/ab2979f058de215f0f2ae5b052739e76d3c02ac5.zip)
+* Column names must be: `band_name` and `lifespan` (in years **until 2022** - please use `2022` instead of `YEAR(CURDATE())`)
+* You should use attributes `formed` and `split` for computing the `lifespan`
+* Your script can be executed on any database
+```groovy
+bob@dylan:~$ cat metal_bands.sql | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 3-glam_rock.sql | mysql -uroot -p holberton 
+Enter password: 
+band_name   lifespan
+Alice Cooper    56
+Mötley Crüe   34
+Marilyn Manson  31
+The 69 Eyes 30
+Hardcore Superstar  23
+Nasty Idols 0
+Hanoi Rocks 0
+bob@dylan:~$
+```
 
+## 4. Buy buy buy: [4-store.sql](4-store.sql)
+Write a SQL script that creates a trigger that decreases the quantity of an item after adding a new order.
+
+Quantity in the table `items` can be negative.
+
+**Context:** _Updating multiple tables for one action from your application can generate issue: network disconnection, crash, etc… to keep your data in a good shape, let MySQL do it for you!_
+```groovy
+bob@dylan:~$ cat 4-init.sql
+-- Initial
+DROP TABLE IF EXISTS items;
+DROP TABLE IF EXISTS orders;
+
+CREATE TABLE IF NOT EXISTS items (
+    name VARCHAR(255) NOT NULL,
+    quantity int NOT NULL DEFAULT 10
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    item_name VARCHAR(255) NOT NULL,
+    number int NOT NULL
+);
+
+INSERT INTO items (name) VALUES ("apple"), ("pineapple"), ("pear");
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 4-init.sql | mysql -uroot -p holberton 
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 4-store.sql | mysql -uroot -p holberton 
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 4-main.sql
+Enter password: 
+-- Show and add orders
+SELECT * FROM items;
+SELECT * FROM orders;
+
+INSERT INTO orders (item_name, number) VALUES ('apple', 1);
+INSERT INTO orders (item_name, number) VALUES ('apple', 3);
+INSERT INTO orders (item_name, number) VALUES ('pear', 2);
+
+SELECT "--";
+
+SELECT * FROM items;
+SELECT * FROM orders;
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 4-main.sql | mysql -uroot -p holberton 
+Enter password: 
+name    quantity
+apple   10
+pineapple   10
+pear    10
+--
+--
+name    quantity
+apple   6
+pineapple   10
+pear    8
+item_name   number
+apple   1
+apple   3
+pear    2
+bob@dylan:~$
+```
+
+## 5. Email validation to sent: [5-valid_email.sql](5-valid_email.sql)
+Write a SQL script that creates a trigger that resets the attribute `valid_email` only when the `email` has been changed.
+
+**Context:** _Nothing related to MySQL, but perfect for user email validation - distribute the logic to the database itself!_
+```groovy
+bob@dylan:~$ cat 5-init.sql
+-- Initial
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE IF NOT EXISTS users (
+    id int not null AUTO_INCREMENT,
+    email varchar(255) not null,
+    name varchar(255),
+    valid_email boolean not null default 0,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO users (email, name) VALUES ("bob@dylan.com", "Bob");
+INSERT INTO users (email, name, valid_email) VALUES ("sylvie@dylan.com", "Sylvie", 1);
+INSERT INTO users (email, name, valid_email) VALUES ("jeanne@dylan.com", "Jeanne", 1);
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 5-init.sql | mysql -uroot -p holberton 
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 5-valid_email.sql | mysql -uroot -p holberton 
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 5-main.sql
+Enter password: 
+-- Show users and update (or not) email
+SELECT * FROM users;
+
+UPDATE users SET valid_email = 1 WHERE email = "bob@dylan.com";
+UPDATE users SET email = "sylvie+new@dylan.com" WHERE email = "sylvie@dylan.com";
+UPDATE users SET name = "Jannis" WHERE email = "jeanne@dylan.com";
+
+SELECT "--";
+SELECT * FROM users;
+
+UPDATE users SET email = "bob@dylan.com" WHERE email = "bob@dylan.com";
+
+SELECT "--";
+SELECT * FROM users;
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 5-main.sql | mysql -uroot -p holberton 
+Enter password: 
+id  email   name    valid_email
+1   bob@dylan.com   Bob 0
+2   sylvie@dylan.com    Sylvie  1
+3   jeanne@dylan.com    Jeanne  1
+--
+--
+id  email   name    valid_email
+1   bob@dylan.com   Bob 1
+2   sylvie+new@dylan.com    Sylvie  0
+3   jeanne@dylan.com    Jannis  1
+--
+--
+id  email   name    valid_email
+1   bob@dylan.com   Bob 1
+2   sylvie+new@dylan.com    Sylvie  0
+3   jeanne@dylan.com    Jannis  1
+bob@dylan:~$
+```
 
 
 
