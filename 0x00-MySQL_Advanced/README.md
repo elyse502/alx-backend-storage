@@ -629,16 +629,214 @@ bye
 bob@dylan:~$
 ```
 
+## 9. Optimize search and score: [9-index_name_score.sql](9-index_name_score.sql)
+Write a SQL script that creates an index `idx_name_first_score` on the table `names` and the first letter of `name` and the `score`.
 
+**Requirements:**
 
+* Import this table dump: [**`names.sql.zip`**](👈This `File` was too Big to handle)
+* Only the first letter of `name` AND `score` must be indexed
+```groovy
+bob@dylan:~$ cat names.sql | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ mysql -uroot -p holberton
+Enter password: 
+mysql> SELECT COUNT(name) FROM names WHERE name LIKE 'a%' AND score < 80;
++-------------+
+| count(name) |
++-------------+
+|       60717 |
++-------------+
+1 row in set (2.40 sec)
+mysql> 
+mysql> exit
+bye
+bob@dylan:~$ 
+bob@dylan:~$ cat 9-index_name_score.sql | mysql -uroot -p holberton 
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ mysql -uroot -p holberton
+Enter password: 
+mysql> SHOW index FROM names;
++-------+------------+----------------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table | Non_unique | Key_name             | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++-------+------------+----------------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| names |          1 | idx_name_first_score |            1 | name        | A         |          25 |        1 | NULL   | YES  | BTREE      |         |               |
+| names |          1 | idx_name_first_score |            2 | score       | A         |        3901 |     NULL | NULL   | YES  | BTREE      |         |               |
++-------+------------+----------------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+2 rows in set (0.00 sec)
+mysql> 
+mysql> SELECT COUNT(name) FROM names WHERE name LIKE 'a%' AND score < 80;
++-------------+
+| COUNT(name) |
++-------------+
+|       60717 |
++-------------+
+1 row in set (0.48 sec)
+mysql> 
+mysql> exit
+bye
+bob@dylan:~$
+```
 
+## 10. Safe divide: [10-div.sql](10-div.sql)
+Write a SQL script that creates a function `SafeDiv` that divides (and returns) the first by the second number or returns 0 if the second number is equal to 0.
 
+**Requirements:**
 
+* You must create a function
+* The function `SafeDiv` takes 2 arguments:
+  * `a`, INT
+  * `b`, INT
+* And returns `a / b` or 0 if `b == 0`
+```groovy
+bob@dylan:~$ cat 10-init.sql
+-- Initial
+DROP TABLE IF EXISTS numbers;
 
+CREATE TABLE IF NOT EXISTS numbers (
+    a int default 0,
+    b int default 0
+);
 
+INSERT INTO numbers (a, b) VALUES (10, 2);
+INSERT INTO numbers (a, b) VALUES (4, 5);
+INSERT INTO numbers (a, b) VALUES (2, 3);
+INSERT INTO numbers (a, b) VALUES (6, 3);
+INSERT INTO numbers (a, b) VALUES (7, 0);
+INSERT INTO numbers (a, b) VALUES (6, 8);
 
+bob@dylan:~$ cat 10-init.sql | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 10-div.sql | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ echo "SELECT (a / b) FROM numbers;" | mysql -uroot -p holberton
+Enter password: 
+(a / b)
+5.0000
+0.8000
+0.6667
+2.0000
+NULL
+0.7500
+bob@dylan:~$ 
+bob@dylan:~$ echo "SELECT SafeDiv(a, b) FROM numbers;" | mysql -uroot -p holberton
+Enter password: 
+SafeDiv(a, b)
+5
+0.800000011920929
+0.6666666865348816
+2
+0
+0.75
+bob@dylan:~$
+```
 
+## 11. No table for a meeting: [11-need_meeting.sql](11-need_meeting.sql)
+Write a SQL script that creates a view `need_meeting` that lists all students that have a score under 80 (strict) and no `last_meeting` or more than 1 month.
 
+**Requirements:**
+
+* The view `need_meeting` should return all students name when:
+  * They score are under (strict) to 80
+  * **AND** no `last_meeting` date **OR** more than a month
+```groovy
+bob@dylan:~$ cat 11-init.sql
+-- Initial
+DROP TABLE IF EXISTS students;
+
+CREATE TABLE IF NOT EXISTS students (
+    name VARCHAR(255) NOT NULL,
+    score INT default 0,
+    last_meeting DATE NULL 
+);
+
+INSERT INTO students (name, score) VALUES ("Bob", 80);
+INSERT INTO students (name, score) VALUES ("Sylvia", 120);
+INSERT INTO students (name, score) VALUES ("Jean", 60);
+INSERT INTO students (name, score) VALUES ("Steeve", 50);
+INSERT INTO students (name, score) VALUES ("Camilia", 80);
+INSERT INTO students (name, score) VALUES ("Alexa", 130);
+
+bob@dylan:~$ cat 11-init.sql | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 11-need_meeting.sql | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 11-main.sql
+-- Test view
+SELECT * FROM need_meeting;
+
+SELECT "--";
+
+UPDATE students SET score = 40 WHERE name = 'Bob';
+SELECT * FROM need_meeting;
+
+SELECT "--";
+
+UPDATE students SET score = 80 WHERE name = 'Steeve';
+SELECT * FROM need_meeting;
+
+SELECT "--";
+
+UPDATE students SET last_meeting = CURDATE() WHERE name = 'Jean';
+SELECT * FROM need_meeting;
+
+SELECT "--";
+
+UPDATE students SET last_meeting = ADDDATE(CURDATE(), INTERVAL -2 MONTH) WHERE name = 'Jean';
+SELECT * FROM need_meeting;
+
+SELECT "--";
+
+SHOW CREATE TABLE need_meeting;
+
+SELECT "--";
+
+SHOW CREATE TABLE students;
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 11-main.sql | mysql -uroot -p holberton
+Enter password: 
+name
+Jean
+Steeve
+--
+--
+name
+Bob
+Jean
+Steeve
+--
+--
+name
+Bob
+Jean
+--
+--
+name
+Bob
+--
+--
+name
+Bob
+Jean
+--
+--
+View    Create View character_set_client    collation_connection
+XXXXXX<yes, here it will display the View SQL statement :-) >XXXXXX
+--
+--
+Table   Create Table
+students    CREATE TABLE `students` (\n  `name` varchar(255) NOT NULL,\n  `score` int(11) DEFAULT '0',\n  `last_meeting` date DEFAULT NULL\n) ENGINE=InnoDB DEFAULT CHARSET=latin1
+bob@dylan:~$
+```
+
+## 12. Average weighted score: [100-average_weighted_score.sql](100-average_weighted_score.sql)
 
 
 
