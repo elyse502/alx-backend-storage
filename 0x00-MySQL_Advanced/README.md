@@ -629,6 +629,43 @@ bye
 bob@dylan:~$
 ```
 
+---
+
+# Reference 📚
+If you wanna download the names.sql.zip to your sandbox
+```groovy
+#!/bin/bash
+
+curl -L -o names.zip https://intranet-projects-files.s3.amazonaws.com/holbertonschool-webstack/632/names.sql.zip
+```
+
+![Screenshot_from_2024-01-20_14-35-45](https://github.com/elyse502/alx-backend-storage/assets/125453474/f139956b-2bfa-47be-98c9-04d6a30458cf)
+
+# Setting up 🏗️
+1. **List the contents of the zip file:**
+
+```bash
+unzip -l names.zip
+```
+This command will list the contents of the zip file. Ensure that `names.sql` is listed.
+
+2. **Extract the file:**
+
+```bash
+unzip names.zip names.sql
+```
+This command extracts only the `names.sql` file from the `names.zip` archive.
+
+3. **Verify the extraction:**
+Check if the file has been successfully extracted:
+
+```bash
+ls names.sql
+```
+This should allow you to access the `names.sql` file from the `names.zip` archive.
+
+---
+
 ## 9. Optimize search and score: [9-index_name_score.sql](9-index_name_score.sql)
 Write a SQL script that creates an index `idx_name_first_score` on the table `names` and the first letter of `name` and the `score`.
 
@@ -679,6 +716,43 @@ mysql> exit
 bye
 bob@dylan:~$
 ```
+
+---
+
+# Reference 📚
+If you wanna download the names.sql.zip to your sandbox
+```groovy
+#!/bin/bash
+
+curl -L -o names.zip https://intranet-projects-files.s3.amazonaws.com/holbertonschool-webstack/632/names.sql.zip
+```
+
+![Screenshot_from_2024-01-20_14-35-45](https://github.com/elyse502/alx-backend-storage/assets/125453474/f139956b-2bfa-47be-98c9-04d6a30458cf)
+
+# Setting up 🏗️
+1. **List the contents of the zip file:**
+
+```bash
+unzip -l names.zip
+```
+This command will list the contents of the zip file. Ensure that `names.sql` is listed.
+
+2. **Extract the file:**
+
+```bash
+unzip names.zip names.sql
+```
+This command extracts only the `names.sql` file from the `names.zip` archive.
+
+3. **Verify the extraction:**
+Check if the file has been successfully extracted:
+
+```bash
+ls names.sql
+```
+This should allow you to access the `names.sql` file from the `names.zip` archive.
+
+---
 
 ## 10. Safe divide: [10-div.sql](10-div.sql)
 Write a SQL script that creates a function `SafeDiv` that divides (and returns) the first by the second number or returns 0 if the second number is equal to 0.
