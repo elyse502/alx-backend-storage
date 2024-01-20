@@ -632,7 +632,7 @@ bob@dylan:~$
 ---
 
 # Reference 📚
-If you wanna download the names.sql.zip to your sandbox
+If you wanna download the `names.sql.zip` to your sandbox
 ```groovy
 #!/bin/bash
 
@@ -720,7 +720,7 @@ bob@dylan:~$
 ---
 
 # Reference 📚
-If you wanna download the names.sql.zip to your sandbox
+If you wanna download the `names.sql.zip` to your sandbox
 ```groovy
 #!/bin/bash
 
