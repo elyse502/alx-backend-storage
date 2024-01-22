@@ -270,7 +270,7 @@ Write a Python function that inserts a new document in a collection based on `kw
 * Prototype: `def insert_school(mongo_collection, **kwargs):`
 * `mongo_collection` will be the `pymongo` collection object
 * Returns the new `_id`
-```
+```groovy
 guillaume@ubuntu:~/0x01$ cat 9-main.py
 #!/usr/bin/env python3
 """ 9-main """
