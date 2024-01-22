@@ -1,0 +1,6 @@
+// 7. Delete by match: A script that deletes all documents with name="Holberton school" in the collection school
+try {
+    db.school.deleteMany( { name: "Holberton school" } );
+} catch (e) {
+  print (e);
+}
