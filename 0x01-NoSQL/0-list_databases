@@ -1,2 +1,3 @@
 // 0. List all databases: A script that lists all databases
+
 show dbs
