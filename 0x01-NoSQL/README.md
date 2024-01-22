@@ -532,8 +532,58 @@ IPs:
 guillaume@ubuntu:~/0x01$
 ```
 
+---
 
+# Reference 📚
+```groovy
+#!/bin/bash
 
+# Add MongoDB GPG key
+wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
 
+# Add MongoDB repository to sources list
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null
+
+# Update apt packages
+sudo apt-get update
+
+# Install MongoDB
+sudo apt-get install -y mongodb-org
+
+# Check MongoDB service status
+sudo service mongod status
+
+# Display MongoDB version
+mongo --version
+
+# Install pymongo using pip3
+pip3 install pymongo
+
+# Create data directory if not exists
+sudo mkdir -p /data/db
+
+# Start MongoDB service
+sudo service mongod start
+
+# Check pymongo version in Python
+python3 - <<EOF
+import pymongo
+print("Installed pymongo version:", pymongo.__version__)
+EOF
+```
+
+This script performs the following tasks:
+
+>```groovy
+>   Adds the MongoDB GPG key.
+>   Adds the MongoDB repository to the sources list.
+>   Updates the package list.
+>   Installs MongoDB.
+>   Checks the MongoDB service status.
+>   Displays the MongoDB version.
+>   Installs pymongo using pip3.
+>   Creates the /data/db directory.
+>   Starts the MongoDB service.
+>   Checks the pymongo version in a Python interactive session. 
 
 
