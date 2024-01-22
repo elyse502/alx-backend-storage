@@ -577,7 +577,7 @@ print("Installed pymongo version:", pymongo.__version__)
 EOF
 ```
 
-This script performs the following tasks:
+This `script` performs the following tasks:
 
 >```groovy
 >   Adds the MongoDB GPG key.
@@ -590,5 +590,10 @@ This script performs the following tasks:
 >   Creates the /data/db directory.
 >   Starts the MongoDB service.
 >   Checks the pymongo version in a Python interactive session. 
+
+
+
+
+
 
 
