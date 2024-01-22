@@ -534,7 +534,12 @@ guillaume@ubuntu:~/0x01$
 
 ---
 
-# Reference 📚
+<div align="center">
+    
+# ♟️ Reference 📚
+
+</div>
+
 ```groovy
 #!/bin/bash
 
