@@ -338,7 +338,102 @@ guillaume@ubuntu:~/0x01$ ./10-main.py
 guillaume@ubuntu:~/0x01$
 ```
 
+## 11. Where can I learn Python?: [11-schools_by_topic.py](11-schools_by_topic.py)
+Write a Python function that returns the list of school having a specific topic:
 
+* Prototype: `def schools_by_topic(mongo_collection, topic):`
+* `mongo_collection` will be the `pymongo` collection object
+* `topic` (string) will be topic searched
+```groovy
+guillaume@ubuntu:~/0x01$ cat 11-main.py
+#!/usr/bin/env python3
+""" 11-main """
+from pymongo import MongoClient
+list_all = __import__('8-all').list_all
+insert_school = __import__('9-insert_school').insert_school
+schools_by_topic = __import__('11-schools_by_topic').schools_by_topic
+
+if __name__ == "__main__":
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    school_collection = client.my_db.school
+
+    j_schools = [
+        { 'name': "Holberton school", 'topics': ["Algo", "C", "Python", "React"]},
+        { 'name': "UCSF", 'topics': ["Algo", "MongoDB"]},
+        { 'name': "UCLA", 'topics': ["C", "Python"]},
+        { 'name': "UCSD", 'topics': ["Cassandra"]},
+        { 'name': "Stanford", 'topics': ["C", "React", "Javascript"]}
+    ]
+    for j_school in j_schools:
+        insert_school(school_collection, **j_school)
+
+    schools = schools_by_topic(school_collection, "Python")
+    for school in schools:
+        print("[{}] {} {}".format(school.get('_id'), school.get('name'), school.get('topics', "")))
+
+guillaume@ubuntu:~/0x01$ 
+guillaume@ubuntu:~/0x01$ ./11-main.py
+[5a90731fd4321e1e5a3f53e3] Holberton school ['Algo', 'C', 'Python', 'React']
+[5a90731fd4321e1e5a3f53e5] UCLA ['C', 'Python']
+guillaume@ubuntu:~/0x01$
+```
+
+## 12. Log stats: [12-log_stats.py](12-log_stats.py)
+Write a Python script that provides some stats about Nginx logs stored in MongoDB:
+
+* Database: `logs`
+* Collection: `nginx`
+* Display (same as the example):
+    * first line: `x logs` where `x` is the number of documents in this collection
+    * second line: `Methods:`
+    * 5 lines with the number of documents with the `method` = `["GET", "POST", "PUT", "PATCH", "DELETE"]` in this order (see example below - warning: it’s a tabulation before each line)
+    * one line with the number of documents with:
+        * `method=GET`
+        * `path=/status`
+
+You can use this dump as data sample: [dump.zip](https://github.com/elyse502/alx-backend-storage/files/14010055/645541f867bb79ae47b7a80922e9a48604a569b9.zip)
+
+
+The output of your script **must be exactly the same as the example**
+```groovy
+guillaume@ubuntu:~/0x01$ curl -o dump.zip -s "https://s3.amazonaws.com/intranet-projects-files/holbertonschool-webstack/411/dump.zip"
+guillaume@ubuntu:~/0x01$ 
+guillaume@ubuntu:~/0x01$ unzip dump.zip
+Archive:  dump.zip
+   creating: dump/
+   creating: dump/logs/
+  inflating: dump/logs/nginx.metadata.json  
+  inflating: dump/logs/nginx.bson    
+guillaume@ubuntu:~/0x01$ 
+guillaume@ubuntu:~/0x01$ mongorestore dump
+2018-02-23T20:12:37.807+0000    preparing collections to restore from
+2018-02-23T20:12:37.816+0000    reading metadata for logs.nginx from dump/logs/nginx.metadata.json
+2018-02-23T20:12:37.825+0000    restoring logs.nginx from dump/logs/nginx.bson
+2018-02-23T20:12:40.804+0000    [##......................]  logs.nginx  1.21MB/13.4MB  (9.0%)
+2018-02-23T20:12:43.803+0000    [#####...................]  logs.nginx  2.88MB/13.4MB  (21.4%)
+2018-02-23T20:12:46.803+0000    [#######.................]  logs.nginx  4.22MB/13.4MB  (31.4%)
+2018-02-23T20:12:49.803+0000    [##########..............]  logs.nginx  5.73MB/13.4MB  (42.7%)
+2018-02-23T20:12:52.803+0000    [############............]  logs.nginx  7.23MB/13.4MB  (53.8%)
+2018-02-23T20:12:55.803+0000    [###############.........]  logs.nginx  8.53MB/13.4MB  (63.5%)
+2018-02-23T20:12:58.803+0000    [#################.......]  logs.nginx  10.1MB/13.4MB  (74.9%)
+2018-02-23T20:13:01.803+0000    [####################....]  logs.nginx  11.3MB/13.4MB  (83.9%)
+2018-02-23T20:13:04.803+0000    [######################..]  logs.nginx  12.8MB/13.4MB  (94.9%)
+2018-02-23T20:13:06.228+0000    [########################]  logs.nginx  13.4MB/13.4MB  (100.0%)
+2018-02-23T20:13:06.230+0000    no indexes to restore
+2018-02-23T20:13:06.231+0000    finished restoring logs.nginx (94778 documents)
+2018-02-23T20:13:06.232+0000    done
+guillaume@ubuntu:~/0x01$ 
+guillaume@ubuntu:~/0x01$ ./12-log_stats.py 
+94778 logs
+Methods:
+    method GET: 93842
+    method POST: 229
+    method PUT: 0
+    method PATCH: 0
+    method DELETE: 0
+47415 status check
+guillaume@ubuntu:~/0x01$
+```
 
 
 
