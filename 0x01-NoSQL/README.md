@@ -595,8 +595,13 @@ This `script` performs the following tasks:
 
     * Use this if it does not work 
 
+<div align="center">
+    
 # Other one 🍿
+
 For those having challenge installing MongoDB on  ubuntu jammy, use he command below:
+</div>
+
 ```groovy
 curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-archive-keyring.gpg –dearmor
 
