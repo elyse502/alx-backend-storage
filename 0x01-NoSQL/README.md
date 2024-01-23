@@ -595,5 +595,35 @@ This `script` performs the following tasks:
 
     * Use this if it does not work 
 
+# Other one 🍿
+For those having challenge installing MongoDB on  ubuntu jammy, use he command below:
+```groovy
+curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-archive-keyring.gpg –dearmor
+
+echo "deb [signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+
+sudo apt-get update
+
+sudo apt-get install -y mongodb-org
+```
+You need to check the version of your ubuntu with
+> lab_release -a
+
+Get the codename, like mine is jammy and I replace the version 4.4 to 7.0 which is the compatible one for my system. You can check that out here:
+> https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/
+
+You can proceed to start it with the appropriate command your platform uses to init which is either systemctl or service.
+
+
+
+
+
+
+
+
+
+
+
 
 
