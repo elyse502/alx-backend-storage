@@ -93,41 +93,120 @@ for value, fn in TEST_CASES.items():
     assert cache.get(key, fn=fn) == value
 ```    
 
-##
+## 2. Incrementing values: [exercise.py](exercise.py)
+Familiarize yourself with the `INCR` command and its python equivalent.
 
+In this task, we will implement a system to count how many times methods of the `Cache` class are called.
 
+Above `Cache` define a `count_calls` decorator that takes a single `method` `Callable` argument and returns a `Callable`.
 
+As a key, use the qualified name of `method` using the `__qualname__` dunder method.
 
+Create and return function that increments the count for that key every time the method is called and returns the value returned by the original method.
 
+Remember that the first argument of the wrapped function will be `self` which is the instance itself, which lets you access the Redis instance.
 
+Protip: when defining a decorator it is useful to use `functool.wraps` to conserve the original function’s name, docstring, etc. Make sure you use it as described [here](https://docs.python.org/3.7/library/functools.html#functools.wraps).
 
+Decorate `Cache.store` with `count_calls`.
+```groovy
+bob@dylan:~$ cat main.py
+#!/usr/bin/env python3
+""" Main file """
 
+Cache = __import__('exercise').Cache
 
+cache = Cache()
 
+cache.store(b"first")
+print(cache.get(cache.store.__qualname__))
 
+cache.store(b"second")
+cache.store(b"third")
+print(cache.get(cache.store.__qualname__))
 
+bob@dylan:~$ ./main.py
+b'1'
+b'3'
+bob@dylan:~$
+```
 
+## 3. Storing lists: [exercise.py](exercise.py)
+Familiarize yourself with redis commands `RPUSH`, `LPUSH`, `LRANGE`, etc.
 
+In this task, we will define a `call_history` decorator to store the history of inputs and outputs for a particular function.
 
+Everytime the original function will be called, we will add its input parameters to one list in redis, and store its output into another list.
 
+In `call_history`, use the decorated function’s qualified name and append `":inputs"` and `":outputs"` to create input and output list keys, respectively.
 
+`call_history` has a single parameter named `method` that is a `Callable` and returns a `Callable`.
 
+In the new function that the decorator will return, use `rpush` to append the input arguments. Remember that Redis can only store strings, bytes and numbers. Therefore, we can simply use `str(args)` to normalize. We can ignore potential `kwargs` for now.
 
+Execute the wrapped function to retrieve the output. Store the output using `rpush` in the `"...:outputs"` list, then return the output.
 
+Decorate `Cache.store` with `call_history`.
+```groovy
+bob@dylan:~$ cat main.py
+#!/usr/bin/env python3
+""" Main file """
 
+Cache = __import__('exercise').Cache
 
+cache = Cache()
 
+s1 = cache.store("first")
+print(s1)
+s2 = cache.store("secont")
+print(s2)
+s3 = cache.store("third")
+print(s3)
 
+inputs = cache._redis.lrange("{}:inputs".format(cache.store.__qualname__), 0, -1)
+outputs = cache._redis.lrange("{}:outputs".format(cache.store.__qualname__), 0, -1)
 
+print("inputs: {}".format(inputs))
+print("outputs: {}".format(outputs))
 
+bob@dylan:~$ ./main.py
+04f8dcaa-d354-4221-87f3-4923393a25ad
+a160a8a8-06dc-4934-8e95-df0cb839644b
+15a8fd87-1f55-4059-86aa-9d1a0d4f2aea
+inputs: [b"('first',)", b"('secont',)", b"('third',)"]
+outputs: [b'04f8dcaa-d354-4221-87f3-4923393a25ad', b'a160a8a8-06dc-4934-8e95-df0cb839644b', b'15a8fd87-1f55-4059-86aa-9d1a0d4f2aea']
+bob@dylan:~$
+```
 
+## 4. Retrieving lists: [exercise.py](exercise.py)
+In this tasks, we will implement a `replay` function to display the history of calls of a particular function.
 
+Use keys generated in previous tasks to generate the following output:
+```groovy
+>>> cache = Cache()
+>>> cache.store("foo")
+>>> cache.store("bar")
+>>> cache.store(42)
+>>> replay(cache.store)
+Cache.store was called 3 times:
+Cache.store(*('foo',)) -> 13bf32a9-a249-4664-95fc-b1062db2038f
+Cache.store(*('bar',)) -> dcddd00c-4219-4dd7-8877-66afbe8e7df8
+Cache.store(*(42,)) -> 5e752f2b-ecd8-4925-a3ce-e2efdee08d20
+```
+Tip: use `lrange` and `zip` to loop over inputs and outputs.
 
+## 5. Implementing an expiring web cache and tracker: [web.py](web.py)
+In this tasks, we will implement a `get_page` function (prototype: `def get_page(url: str) -> str:`). The core of the function is very simple. It uses the `requests` module to obtain the HTML content of a particular URL and returns it.
 
+Start in a new file named `web.py` and do not reuse the code written in `exercise.py`.
 
+Inside `get_page` track how many times a particular URL was accessed in the key `"count:{url}"` and cache the result with an expiration time of 10 seconds.
 
+Tip: Use `http://slowwly.robertomurray.co.uk` to simulate a slow response and test your caching.
 
+Bonus: implement this use case with decorators.
 
+---
 
 <div align="center">
     
