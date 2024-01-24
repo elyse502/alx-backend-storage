@@ -10,6 +10,11 @@ This repository consists of Backend Storage projects done with [ALX Africa](http
 
 ---
 
+<div align="center">
+
+# TABLE OF CONTENT 📖
+</div>
+
 - [0x00](./0x00-MySQL_Advanced) : Introduction to Advanced `MySQL`.
 - [0x01](./0x01-NoSQL) : What `NoSQL` means, How to query information from a `NoSQL` database and How to use `MongoDB`.
 - [0x02](./0x02-redis_basic) : How to use `redis` for basic operations and as a simple cache.
