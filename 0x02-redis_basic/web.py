@@ -18,22 +18,38 @@ a slow response and test your caching."""
 
 import redis
 import requests
-from datetime import timedelta
+from functools import wraps
+
+redis_ = redis.Redis()
 
 
+def url_access_count(method):
+    """ Decorator for get_page function """
+    @wraps(method)
+    def wrapper(url):
+        """ Wrapper function """
+        key = "cached:" + url
+        cached_value = redis_.get(key)
+        if cached_value:
+            return cached_value.decode("utf-8")
+
+            # Get new content and update cache
+        key_count = "count:" + url
+        html_content = method(url)
+
+        redis_.incr(key_count)
+        redis_.set(key, html_content, ex=10)
+        redis_.expire(key, 10)
+        return html_content
+    return wrapper
+
+
+@url_access_count
 def get_page(url: str) -> str:
-    '''Returns the content of a URL after caching the request's response,
-    and tracking the request.
-    '''
-    if url is None or len(url.strip()) == 0:
-        return ''
-    redis_store = redis.Redis()
-    res_key = 'result:{}'.format(url)
-    req_key = 'count:{}'.format(url)
-    result = redis_store.get(res_key)
-    if result is not None:
-        redis_store.incr(req_key)
-        return result
-    result = requests.get(url).content.decode('utf-8')
-    redis_store.setex(res_key, timedelta(seconds=10), result)
-    return result
+    """ Obtain the HTML content of a particular """
+    results = requests.get(url)
+    return results.text
+
+
+if __name__ == "__main__":
+    get_page('http://slowwly.robertomurray.co.uk')
