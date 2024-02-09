@@ -1,3 +1,5 @@
+![How-Redis-typically-works](https://github.com/elyse502/alx-backend-storage/assets/125453474/4e9ecc78-a309-45af-9dbd-24ee8d3cfbc2)
+
 <p align="center">
 <h2 align="center"><img align="center" src="https://assets.imaginablefutures.com/media/images/ALX_Logo.max-200x150.png" alt="footer" width="150"  height="150"/></h2>
 
