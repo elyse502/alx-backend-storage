@@ -35,7 +35,7 @@ $ sed -i "s/bind .*/bind 127.0.0.1/g" /etc/redis/redis.conf
 ```
 
 # Use Redis in a container
-Redis server is stopped by default - when you are starting a container, you should start it with: `service redis-server start`
+**N.B:** Redis server is stopped by default - when you are starting a container, you should start it with: `service redis-server start`
 
 # Tasks 📃
 ## 0. Writing strings to Redis: [exercise.py](exercise.py)
@@ -45,7 +45,7 @@ Create a `store` method that takes a `data` argument and returns a string. The m
 
 Type-annotate `store` correctly. Remember that `data` can be a `str`, `bytes`, `int` or `float`.
 ```groovy
-bob@dylan:~$ cat main.py
+bob@dylan:~$ cat 0-main.py
 #!/usr/bin/env python3
 """
 Main file
@@ -63,7 +63,7 @@ print(key)
 local_redis = redis.Redis()
 print(local_redis.get(key))
 
-bob@dylan:~$ python3 main.py 
+bob@dylan:~$ python3 0-main.py 
 3a3e8231-b2f6-450d-8b0e-0f38f16e8ca2
 b'hello'
 bob@dylan:~$
@@ -110,7 +110,7 @@ Protip: when defining a decorator it is useful to use `functool.wraps` to conser
 
 Decorate `Cache.store` with `count_calls`.
 ```groovy
-bob@dylan:~$ cat main.py
+bob@dylan:~$ cat 2-main.py
 #!/usr/bin/env python3
 """ Main file """
 
@@ -125,7 +125,7 @@ cache.store(b"second")
 cache.store(b"third")
 print(cache.get(cache.store.__qualname__))
 
-bob@dylan:~$ ./main.py
+bob@dylan:~$ ./2-main.py
 b'1'
 b'3'
 bob@dylan:~$
@@ -148,7 +148,7 @@ Execute the wrapped function to retrieve the output. Store the output using `rpu
 
 Decorate `Cache.store` with `call_history`.
 ```groovy
-bob@dylan:~$ cat main.py
+bob@dylan:~$ cat 3-main.py
 #!/usr/bin/env python3
 """ Main file """
 
@@ -169,7 +169,7 @@ outputs = cache._redis.lrange("{}:outputs".format(cache.store.__qualname__), 0, 
 print("inputs: {}".format(inputs))
 print("outputs: {}".format(outputs))
 
-bob@dylan:~$ ./main.py
+bob@dylan:~$ ./3-main.py
 04f8dcaa-d354-4221-87f3-4923393a25ad
 a160a8a8-06dc-4934-8e95-df0cb839644b
 15a8fd87-1f55-4059-86aa-9d1a0d4f2aea
